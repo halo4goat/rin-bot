@@ -2,5 +2,6 @@ aiohttp>=3.9
 python-socketio[asyncio_client]>=5.11
 python-dotenv>=1.0
 livekit>=0.18
-yt-dlp
+yt-dlp[default]
+deno
 flask>=3.0
