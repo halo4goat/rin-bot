@@ -141,7 +141,7 @@ class Track:
 
 
 def _extract(query):
-    opts = {"format": "bestaudio/best", "noplaylist": True, "quiet": True, "no_warnings": True}
+    opts = {"format": "bestaudio/best", "noplaylist": True, "quiet": True}  # warnings stay visible in the logs
     if os.path.exists(COOKIES):  # only use it if the file is actually there
         opts["cookiefile"] = COOKIES
     with yt_dlp.YoutubeDL(opts) as ydl:
