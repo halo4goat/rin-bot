@@ -1,0 +1,6 @@
+aiohttp>=3.9
+python-socketio[asyncio_client]>=5.11
+python-dotenv>=1.0
+livekit>=0.18
+yt-dlp
+flask>=3.0
