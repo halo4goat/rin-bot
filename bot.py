@@ -22,6 +22,14 @@ COLOR = 0xFFC928
 RATE, CHANNELS, SAMPLES = 48000, 2, 960            # 20 ms frames, as Echoed requires
 FRAME_BYTES = SAMPLES * CHANNELS * 2               # 16-bit PCM
 VOICE_FILE = "rin_voice.json"
+SECRET_COOKIES = "/etc/secrets/youtube_cookies.txt"  # where Render mounts secret files
+COOKIES = "youtube_cookies.txt"  # optional: browser cookies, helps when YouTube blocks downloads
+if os.path.exists(SECRET_COOKIES):
+    # Render's secret files are read-only, but yt-dlp wants to update its cookie file, so use a copy
+    try:
+        shutil.copyfile(SECRET_COOKIES, COOKIES)
+    except OSError as e:
+        logging.warning("couldn't copy the cookies file: %s", e)
 BOT_ID = ""
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
@@ -134,6 +142,8 @@ class Track:
 
 def _extract(query):
     opts = {"format": "bestaudio/best", "noplaylist": True, "quiet": True, "no_warnings": True}
+    if os.path.exists(COOKIES):  # only use it if the file is actually there
+        opts["cookiefile"] = COOKIES
     with yt_dlp.YoutubeDL(opts) as ydl:
         info = ydl.extract_info(query if re.match(r"https?://", query) else f"ytsearch1:{query}", download=False)
         if info and "entries" in info:
